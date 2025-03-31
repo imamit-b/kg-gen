@@ -201,3 +201,20 @@ class KGGen:
       relations=all_relations,
       edges=all_edges
     )
+  def save_graph(self, graph: Graph, graph_name: str, save_dir: str = "saved_graphs"):
+      """Save the generated graph to a JSON file."""
+      file_path = os.path.join(save_dir, f"{graph_name}.json")
+      graph_dict = {
+        'entities': list(graph.entities),
+        'relations': list(graph.relations),
+        'edges': list(graph.edges),
+        'entity_clusters': getattr(graph, 'entity_clusters', {}),  # Handle clusters if they exist
+        'edge_clusters': getattr(graph, 'edge_clusters', {})  # Handle edge clusters if they exist
+      }
+
+      os.makedirs(save_dir, exist_ok=True)
+      with open(file_path, 'w') as f:
+          json.dump(graph_dict, f, indent=2)
+
+      print(f"Graph saved successfully at: {file_path}")
+
